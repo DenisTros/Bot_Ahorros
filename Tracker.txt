@@ -15,7 +15,7 @@
    
    5) Ya creado, tene a mano el HTTP API, o sea, tu TOKEN.
    
-   6) Para tenerlo abierto, podes clickear en el primer link del mensaje de botfather, cual arranca ton "t.me", para poder luego hablarle a tu bot*/ 
+   6) Para tenerlo abierto, podes clickear en el primer link del mensaje de botfather, cual arranca ton "t.me", para poder luego hablarle a tu bot*/
 
 
 /* SEGUNDA PARTE: EN GOOGLE SHEETS*/
@@ -37,14 +37,13 @@
    
    8) Nuevamente vas a Publicar, implementar como aplicacion web, nueva version. Y tu bot ya estara listo para usar.
       
-       */ 
+       */
 
 
 
-                                                        /* CÓDIGO PARA BOT en APP SCRIPT - Google Sheets */
+/* CÓDIGO PARA BOT en APP SCRIPT - Google Sheets */
 
 /*COMPLETAR*/
-
 var token = "5257494233:AAFFngZS8Gzn4VOVPCrr2ia7Dpn0ljD8koM"; // Token que sale de botfather
 var telegramUrl = "https://api.telegram.org/bot" + token;
 var webAppUrl = "https://script.google.com/macros/s/AKfycbwj6zR9UTDuf996O4DDTSqHhd97R3g6Bs093D0ZJCm_256CREXQ/exec"; // publicar y sale el link
@@ -52,8 +51,8 @@ var webAppUrl = "https://script.google.com/macros/s/AKfycbwj6zR9UTDuf996O4DDTSqH
 
 
 function setWebhook() {
-  var url = telegramUrl + "/setWebhook?url=" + webAppUrl;
-  var response = UrlFetchApp.fetch(url);
+    var url = telegramUrl + "/setWebhook?url=" + webAppUrl;
+    var response = UrlFetchApp.fetch(url);
 }
 
 
@@ -61,127 +60,113 @@ function setWebhook() {
 
 /*FUNCION PARA TEXTOS Y KEYBOARD*/
 
-function sendMessage(id,text,keyBoard){
-  var data = {
-    method:"post",
-    payload: {
-    method: "sendMessage",
-      chat_id: String(id),
-      text: text,
-      parse_mode: "HTML",
-      reply_markup: JSON.stringify(keyBoard)
-    }
-  
-  };
-  
-  UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/",data);
- }
+function sendMessage(id, text, keyBoard) {
+    var data = {
+        method: "post",
+        payload: {
+            method: "sendMessage",
+            chat_id: String(id),
+            text: text,
+            parse_mode: "HTML",
+            reply_markup: JSON.stringify(keyBoard)
+        }
+
+    };
+
+    UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/", data);
+}
 
 
 function doPost(e) {
-  
-  
-  /* DEFINICION DE VARIABLES*/
-  
-  var contents = JSON.parse(e.postData.contents);
-  var ssId = "1z6QfogkpuPkivuBpjwkJLSkXdkXwlJzw2aFRqy-YtiE"; // Lo que sale de google sheets comenzando en 1
-  var sheet=SpreadsheetApp.openById(ssId).getSheetByName("ahorros");
-  
+
+
+    /* DEFINICION DE VARIABLES*/
+
+    var contents = JSON.parse(e.postData.contents);
+    var ssId = "1z6QfogkpuPkivuBpjwkJLSkXdkXwlJzw2aFRqy-YtiE"; // Lo que sale de google sheets comenzando en 1
+    var sheet = SpreadsheetApp.openById(ssId).getSheetByName("ahorros");
+
     /* PARTO FUNCIONES EN DOS */
-  
-  if (contents.callback_query){
-    
-    var id =contents.callback_query.from.id;
-    var data = contents.callback_query.data;
-    
-    
-    
-    /*DEFINICION DE TOTALES*/
-  
-    if (data == "Pesos") {
-      var pesos = sheet.getDataRange().getCell(3,2).getValue();
-      return sendMessage(id,"Tenés $" + pesos + " crocantes");
-    } else if (data == "Dolares"){
-      var dolares = sheet.getDataRange().getCell(2,2).getValue();
-      return sendMessage(id,"Tenés U$S " + dolares);
-    }
-    else if (data == "Crypto"){
-      var crypto = sheet.getDataRange().getCell(4,2).getValue();
-      return sendMessage(id,"Tenés U$S " + crypto + " en crypto");
-    }
-    
-    
-  }
-  
-  else if (contents.message){
-     var id = contents.message.from.id;
-     var text = contents.message.text;
-       
-    /*SI PONES BIEN/MAL EL TEXTO*/
-    
-    if (text.indexOf(" ") !== -1){
-      
-      var dateNow=new Date;
-      var reformmatedDate = dateNow.getMonth()+1+"/"+dateNow.getDate();      
-      var item = text.split(" ");
-      sheet.appendRow([reformmatedDate,item[0],item[1]]);  /*CARGA FINAL A SHEETS*/
-      
-      return sendMessage(id,"Muy bien " + ", recibido. Para ver como venis en total, escribi 'Dolares', 'Pesos' o 'Crypto' o apreta /totales")
-      
-    }
-    
-    /*DEFINICION DE COMANDOS*/
-    
-   if (text == "/start"){
-      var answer = "Buenas, este bot te sirve para ir actualizando y sabiendo los montos de tus ahorros en dolares, pesos (F) o crypto. Apreta OK para ver como seguimos /OK";
-      return sendMessage(id,answer);
-    } 
-    else if (text == "/OK"){
-      var answer2 = "Los mensajes que mandes van a poder ser de 3 tipos. 'Dólar', 'Crypto' o 'Pesos'. Aquellos que sean para agregar data tienen que tener el formato: [concepto] [valor]. Por ejemplo, 'Dólar 80', o 'Pesos -800'. Despues, para ver los totales, simplemente apretas en /totales";
-      return sendMessage(id,answer2);}
-    
-    else if (text == "/totales"){
-      
-          var keyBoard= {
-      
-        "inline_keyboard": [
-          [{ "text":"Dolares",
-            "callback_data":"Dolares"
-          
-          }],
-        [{ "text":"Pesos",
-            "callback_data":"Pesos"
-          
-          }],
-        [{ "text":"Crypto",
-            "callback_data":"Crypto"
-          
-          }]
-        ]
-      
-      };
-      
-      
-      
-    return sendMessage(id, "Apreta lo que quieras ver", keyBoard)
-    
-    }
-  
-    
-    
-    else {
-      
-    return sendMessage(id, "No McFly, el mensaje que mandes tiene que tener el formato: [concepto] [valor]. Por ejemplo, 'Dólar 80', o 'Pesos -800'. Si queres ver cuanto tenes, apreta /totales")
-    }
-    
-    }
 
-  }
-  
-  
-  
+    if (contents.callback_query) {
 
-  
+        var id = contents.callback_query.from.id;
+        var data = contents.callback_query.data;
 
 
 
+        /*DEFINICION DE TOTALES*/
+
+        if (data == "Pesos") {
+            var pesos = sheet.getDataRange().getCell(3, 2).getValue();
+            return sendMessage(id, "Tenés $" + pesos + " crocantes");
+        } else if (data == "Dolares") {
+            var dolares = sheet.getDataRange().getCell(2, 2).getValue();
+            return sendMessage(id, "Tenés U$S " + dolares);
+        } else if (data == "Crypto") {
+            var crypto = sheet.getDataRange().getCell(4, 2).getValue();
+            return sendMessage(id, "Tenés U$S " + crypto + " en crypto");
+        }
+
+
+    } else if (contents.message) {
+        var id = contents.message.from.id;
+        var text = contents.message.text;
+
+        /*SI PONES BIEN/MAL EL TEXTO*/
+
+        if (text.indexOf(" ") !== -1) {
+
+            var dateNow = new Date;
+            var reformmatedDate = dateNow.getMonth() + 1 + "/" + dateNow.getDate();
+            var item = text.split(" ");
+            sheet.appendRow([reformmatedDate, item[0], item[1]]); /*CARGA FINAL A SHEETS*/
+
+            return sendMessage(id, "Muy bien " + ", recibido. Para ver como venis en total, escribi 'Dolares', 'Pesos' o 'Crypto' o apreta /totales")
+
+        }
+
+        /*DEFINICION DE COMANDOS*/
+
+        if (text == "/start") {
+            var answer = "Buenas, este bot te sirve para ir actualizando y sabiendo los montos de tus ahorros en dolares, pesos (F) o crypto. Apreta OK para ver como seguimos /OK";
+            return sendMessage(id, answer);
+        } else if (text == "/OK") {
+            var answer2 = "Los mensajes que mandes van a poder ser de 3 tipos. 'Dólar', 'Crypto' o 'Pesos'. Aquellos que sean para agregar data tienen que tener el formato: [concepto] [valor]. Por ejemplo, 'Dólar 80', o 'Pesos -800'. Despues, para ver los totales, simplemente apretas en /totales";
+            return sendMessage(id, answer2);
+        } else if (text == "/totales") {
+
+            var keyBoard = {
+
+                "inline_keyboard": [
+                    [{
+                        "text": "Dolares",
+                        "callback_data": "Dolares"
+
+                    }],
+                    [{
+                        "text": "Pesos",
+                        "callback_data": "Pesos"
+
+                    }],
+                    [{
+                        "text": "Crypto",
+                        "callback_data": "Crypto"
+
+                    }]
+                ]
+
+            };
+
+
+
+            return sendMessage(id, "Apreta lo que quieras ver", keyBoard)
+
+        } else {
+
+            return sendMessage(id, "No McFly, el mensaje que mandes tiene que tener el formato: [concepto] [valor]. Por ejemplo, 'Dólar 80', o 'Pesos -800'. Si queres ver cuanto tenes, apreta /totales")
+        }
+
+    }
+
+}

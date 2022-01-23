@@ -44,9 +44,9 @@
 /* CÓDIGO PARA BOT en APP SCRIPT - Google Sheets */
 
 /*COMPLETAR*/
-var token = "5257494233:AAFFngZS8Gzn4VOVPCrr2ia7Dpn0ljD8koM"; // Token que sale de botfather
+var token = ""; // Token que sale de botfather
 var telegramUrl = "https://api.telegram.org/bot" + token;
-var webAppUrl = "https://script.google.com/macros/s/AKfycbwj6zR9UTDuf996O4DDTSqHhd97R3g6Bs093D0ZJCm_256CREXQ/exec"; // publicar y sale el link
+var webAppUrl = ""; // publicar y sale el link
 
 
 
@@ -83,7 +83,7 @@ function doPost(e) {
     /* DEFINICION DE VARIABLES*/
 
     var contents = JSON.parse(e.postData.contents);
-    var ssId = "1z6QfogkpuPkivuBpjwkJLSkXdkXwlJzw2aFRqy-YtiE"; // Lo que sale de google sheets comenzando en 1
+    var ssId = ""; // Lo que sale de google sheets comenzando en 1
     var sheet = SpreadsheetApp.openById(ssId).getSheetByName("ahorros");
 
     /* PARTO FUNCIONES EN DOS */

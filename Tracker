@@ -18,9 +18,11 @@
    6) Para tenerlo abierto, podes clickear en el primer link del mensaje de botfather, cual arranca ton "t.me", para poder luego hablarle a tu bot*/ 
 
 
-/* SEGUNDA PARTE: EN GOOGLE SHEETS*/
+/* SEGUNDA PARTE: EN GOOGLE SHEETS*/ /*SE RECOMIENDA USAR EDITOR VIEJO, NO LA NUEVA VERSION*/
 
 /* 1) Para que el bot funcione correctamente, hay que mantener algunos formatos. Para esto, entra a el siguiente sheet y copia la hoja.
+
+            https://docs.google.com/spreadsheets/d/1KeoqScORX69tWGGMCCRVoS7XlkwmNmqBOUXrwkcBOZg/edit#gid=0
 
    2) Es importante que el nombre de tu sheet sea el mismo.
    

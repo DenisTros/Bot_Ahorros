@@ -37,7 +37,7 @@
       
    7) Por último, en la seccion de "defincion de variables", vas a completar la variable "ssID". Este es el id de tu sheet creado. Lo vas a sacar del link de tu google sheet, en la parte que comienza con "1".
    
-   8) Nuevamente vas a Publicar, implementar como aplicacion web, nueva version. Y tu bot ya estara listo para usar.
+   8) Ejecutar funcion setWebhook. Nuevamente vas a Publicar, implementar como aplicacion web, nueva version. Y tu bot ya estara listo para usar.
       
        */ 
 
